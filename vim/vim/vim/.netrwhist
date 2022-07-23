@@ -1,0 +1,5 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =3
+let g:netrw_dirhist_3='/home/breigner01/Documents/EPITECH/Tek2/HS_Pool/B-FUN-300-PAR-3-3-funPoolDay1-benjamin.reigner'
+let g:netrw_dirhist_2='/tmp'
+let g:netrw_dirhist_1='/usr/share/nvim/runtime/doc'

@@ -1,0 +1,21 @@
+[global_config]
+[keybindings]
+  help = None
+[profiles]
+  [[default]]
+    background_darkness = 0.85
+    background_type = transparent
+    cursor_color = "#aaaaaa"
+    font = JetBrainsMono Nerd Font 10
+    scrollback_lines = 1000
+    scrollback_infinite = True
+    use_system_font = False
+[layouts]
+  [[default]]
+    [[[window0]]]
+      type = Window
+      parent = ""
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+[plugins]

@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+
+if [ $# == 0 ]
+then
+    echo "Opening script itself as no argument was provided"
+    nvim ~/.local/bin/script
+else
+    for arg in $@
+    do
+        filepath=$(which ${arg} 2> /dev/null)
+        if [ $? != 0 ]
+        then
+            echo -e "No script named \"${arg}\" available" >&2
+        else
+            echo -e "Opening ${filepath}"
+            nvim ${filepath}
+        fi
+    done
+fi

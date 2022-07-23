@@ -1,0 +1,18 @@
+#!/usr/bin/zsh
+
+source ~/.config/zsh/.zshrc
+
+echo -e "\n> Update Oh-My-Zsh\n"
+omz update
+
+echo -e "\n> Update Packages\n"
+yay
+
+echo -e "\n> Update Dagger\n"
+git -C ~/Documents/Github/dagger/dagger pull
+make -C ~/Documents/Github/dagger/dagger dagger
+sudo cp ~/Documents/Github/dagger/dagger/cmd/dagger/dagger /usr/local/bin
+
+echo -e "\n> Update Python Packages\n"
+python -m pip freeze --all | cut -f1 -d "=" > /tmp/python_packages.txt
+python -m pip install --upgrade -r /tmp/python_packages.txt

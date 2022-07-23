@@ -1,0 +1,58 @@
+{
+    "suggest.noselect": false,
+    "coc.source.buffer.enable": true,
+    "coc.source.around.enable": true,
+    "coc.source.file.enable": true,
+    "codeLens.enable": true,
+    "languageserver": {
+        "clangd": {
+            "command": "clangd",
+            "args": [
+                "--background-index",
+                "--all-scopes-completion",
+                "--clang-tidy",
+                "--suggest-missing-includes",
+                "--header-insertion=never"
+            ],
+            "filetypes": [
+                "c",
+                "cpp",
+                "objc",
+                "objcpp"
+            ],
+            "rootPatterns": [
+                "compile_flags.txt",
+                "compile_commands.json",
+                ".vim/",
+                ".git/",
+                ".hg/"
+            ],
+            "trace.server": "verbose",
+            "initializationOptions": {
+                "cacheDirectory": "/tmp/clangd"
+            }
+        },
+        "haskell": {
+            "command": "hie-wrapper",
+            "args": ["--lsp"],
+            "rootPatterns": [
+                "*.cabal",
+                "stack.yaml",
+                "cabal.project",
+                "package.yaml",
+                "hie.yaml"
+            ],
+            "filetypes": [
+                "hs",
+                "lhs",
+                "haskell",
+                "lhaskell"
+            ],
+            "initializationOptions": {
+                "haskell": {
+                }
+            }
+        }
+    },
+    "python.jediEnabled": false
+}
