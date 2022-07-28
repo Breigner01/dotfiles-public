@@ -15,4 +15,4 @@ cp -r ~/.config/yay .
 cp ~/.config/zsh/.zshrc ~/.config/zsh/p10k.zsh zsh
 cp ~/.local/bin/update bin
 cp ~/.local/bin/script bin
-grep -B 20 "signingkey" ~/.config/git/config | head -n -1 > git/config && grep -A 20 "signingkey" ~/.config/git/config | tail -n +2 >> git/config
+grep -B 20 -i "signingkey" ~/.config/git/config | head -n -1 > git/config && grep -A 20 -i "signingkey" ~/.config/git/config | tail -n +2 >> git/config

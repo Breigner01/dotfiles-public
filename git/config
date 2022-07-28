@@ -1,0 +1,14 @@
+[user]
+	name = Benjamin Reigner
+	email = benjamin.reigner@epitech.eu
+[pull]
+	rebase = true
+[core]
+	editor = nvim
+	autocrlf = input
+[commit]
+	gpgsign = true
+[init]
+	defaultBranch = main
+[format]
+    signoff = true
