@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cp /etc/environment etc
+cp /etc/pacman.conf etc
 cp /etc/grub.d/40_custom etc/grub.d
 cp -r /etc/zsh etc
 cp /etc/ssh/sshd_config etc/ssh
