@@ -4,5 +4,9 @@
  *
  * Distributed under terms of the %LICENSE% license.
  */
+'use strict';
 
-%HERE%
+describe('%FILE%', () => {
+    test('%HERE%', () => {
+    }
+})

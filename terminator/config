@@ -5,6 +5,7 @@
   [[default]]
     background_darkness = 0.85
     background_type = transparent
+    cursor_shape = ibeam
     cursor_color = "#aaaaaa"
     font = JetBrainsMono Nerd Font 10
     scrollback_lines = 1000

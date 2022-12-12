@@ -136,12 +136,12 @@ ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
 [DirSelect Dialog]
-DirSelectDialog Size=957,598
-History Items[$e]=file:$HOME/Documents/Digital Certificates,file:$HOME/Videos/P13 - OBS - Live Youtube/SCORE BOARD LIVE VIDEO - Ligue Elite/Images OBS,file:///run/media/breigner01/1AAA-6CBC/P13 - OBS - Live Youtube/SCORE BOARD LIVE VIDEO - Ligue Elite/Images OBS,file:///run/media/breigner01/1AAA-6CBC/P13 - OBS - Live Youtube/export set up obs/RILHLigue_EliteLiveStream,file:$HOME/Documents/Ephemere/copy-last-image UI Tests
+DirSelectDialog Size=940,598
+History Items[$e]=file:$HOME/Downloads/Iso,file:$HOME/Documents/Digital Certificates,file:$HOME/Videos/P13 - OBS - Live Youtube/SCORE BOARD LIVE VIDEO - Ligue Elite/Images OBS,file:///run/media/breigner01/1AAA-6CBC/P13 - OBS - Live Youtube/SCORE BOARD LIVE VIDEO - Ligue Elite/Images OBS,file:///run/media/breigner01/1AAA-6CBC/P13 - OBS - Live Youtube/export set up obs/RILHLigue_EliteLiveStream,file:$HOME/Documents/Ephemere/copy-last-image UI Tests
 
 [General]
 BrowserApplication=firefox-developer-edition.desktop
-ColorSchemeHash=bcce7c1c6181c5e14e633cd8301e7a9036b67ac6
+ColorSchemeHash=78952f1103f6f2c59b78c6ed5fa382c3f5ec18e7
 Name=Breeze Dark
 TerminalApplication=terminator
 TerminalService=terminator.desktop
@@ -174,7 +174,7 @@ Show hidden files=false
 Sort by=Name
 Sort directories first=true
 Sort hidden files last=false
-Sort reversed=false
+Sort reversed=true
 Speedbar Width=138
 View Style=DetailTree
 

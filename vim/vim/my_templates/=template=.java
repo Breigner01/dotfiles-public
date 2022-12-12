@@ -5,4 +5,8 @@
  * Distributed under terms of the %LICENSE% license.
  */
 
-%HERE%
+package %HERE%;
+
+public class %FILE% {
+
+}

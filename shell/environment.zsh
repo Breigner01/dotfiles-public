@@ -57,7 +57,7 @@ fi
 export PATH
 
 # GPG vars
-export GPG_TTY=$(tty)
+export GPG_TTY=${TTY}
 
 # Term Colors
 if [ "${TERM}" = "xterm-256color" ]
@@ -105,7 +105,7 @@ export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gktrc"
 export KDEHOME="${XDG_CONFIG_HOME}/kde"
 
 # Less
-export LESSHISTFILE="${XDG_CACHE_HOME}/less/history"
+export LESSHISTFILE="${XDG_STATE_HOME}/less/history"
 
 # MiniKube
 export MINIKUBE_HOME="${XDG_DATA_HOME}/minikube}"

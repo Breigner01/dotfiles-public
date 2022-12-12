@@ -1,8 +1,7 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
 #
-# Epitech project %YEAR%
-# Ludovic Fernandez (ludovic.fernandez@epitech.eu)
-
-%HERE%
+# Project by
+# Ludovic Fernandez
+# http://github.com/Wrexes

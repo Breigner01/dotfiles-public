@@ -4,13 +4,12 @@
 alias ne="emacs -nw"
 
 ## ls and tree
-alias exa="exa --icons --git"
-alias e="exa"
-alias l="exa -lahg"
-alias ll="exa -lhg"
-alias la="exa -laahg"
-alias t="exa --tree -lhg"
-alias ta="exa --tree -lahg"
+alias e="exa --icons --git"
+alias l="e -lahg"
+alias ll="e -lhg"
+alias la="e -laahg"
+alias t="e --tree -lhg"
+alias ta="e --tree -lahg"
 
 # ZSH Config
 alias rc="nvim ~/.config/zsh/.zshrc"

@@ -12,3 +12,5 @@
 	defaultBranch = main
 [format]
     signoff = true
+[safe]
+	directory = /opt/flutter

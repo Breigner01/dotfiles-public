@@ -60,7 +60,7 @@
     nodeenv                 # node.js environment (https://github.com/ekalinin/nodeenv)
     node_version            # node.js version
     go_version              # go version (https://golang.org)
-    # rust_version          # rustc version (https://www.rust-lang.org)
+    rust_version            # rustc version (https://www.rust-lang.org)
     # dotnet_version        # .NET version (https://dotnet.microsoft.com)
     # php_version           # php version (https://www.php.net/)
     # laravel_version       # laravel php framework version (https://laravel.com/)
@@ -105,7 +105,7 @@
     # =========================[ Line #2 ]=========================
     newline
     # ip                    # ip address and bandwidth usage for a specified network interface
-    # public_ip             # public IP address
+    public_ip               # public IP address
     # proxy                 # system-wide http/https/ftp proxy
     battery                 # internal battery
     # wifi                  # wifi speed
@@ -555,7 +555,7 @@
   typeset -g POWERLEVEL9K_BACKGROUND_JOBS_FOREGROUND=6
   typeset -g POWERLEVEL9K_BACKGROUND_JOBS_BACKGROUND=0
   # Don't show the number of background jobs.
-  typeset -g POWERLEVEL9K_BACKGROUND_JOBS_VERBOSE=false
+  typeset -g POWERLEVEL9K_BACKGROUND_JOBS_VERBOSE=true
   # Custom icon.
   # typeset -g POWERLEVEL9K_BACKGROUND_JOBS_VISUAL_IDENTIFIER_EXPANSION='⭐'
 
@@ -933,7 +933,7 @@
   typeset -g POWERLEVEL9K_VIRTUALENV_FOREGROUND=0
   typeset -g POWERLEVEL9K_VIRTUALENV_BACKGROUND=4
   # Don't show Python version next to the virtual environment name.
-  typeset -g POWERLEVEL9K_VIRTUALENV_SHOW_PYTHON_VERSION=false
+  typeset -g POWERLEVEL9K_VIRTUALENV_SHOW_PYTHON_VERSION=true
   # If set to "false", won't show virtualenv if pyenv is already shown.
   # If set to "if-different", won't show virtualenv if it's the same as pyenv.
   typeset -g POWERLEVEL9K_VIRTUALENV_SHOW_WITH_PYENV=false

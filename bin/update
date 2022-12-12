@@ -5,6 +5,9 @@ source ~/.config/zsh/.zshrc
 echo -e "\n> Update Oh-My-Zsh\n"
 omz update
 
+echo -e "\n> Update Powerlevel10k\n"
+git -C ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k pull
+
 echo -e "\n> Update Packages\n"
 yay
 

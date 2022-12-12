@@ -1,25 +1,27 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Maintainer:
+" Original Maintainer:
 "       Amir Salihefendic — @amix3k
-"
 " Awesome_version:
 "       Get this config, nice color schemes and lots of plugins!
-"
 "       Install the awesome version from:
-"
 "           https://github.com/amix/vimrc
+"
+" Fork Maintainer:
+"       Ludovic Fernandez — @SirWrexes
+" Foxy Version:
+"       Get my latest version of this config here !
+"           https://github.com/wrex-dots/vim
 "
 " Sections:
 "    -> General
 "    -> VIM user interface
-"    -> Colors and Fonts
+"    -> Colors, Fonts and Syntax
 "    -> Files and backups
 "    -> Text, tab and indent related
 "    -> Visual mode related
 "    -> Moving around, tabs and buffers
 "    -> Status line
 "    -> Editing mappings
-"    -> vimgrep searching and cope displaying
 "    -> Spell checking
 "    -> Misc
 "    -> Helper functions
@@ -52,13 +54,27 @@ source ${XDG_CONFIG_HOME}/vim/plugsettings.vim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" How to exit vim...
+    " The safe way
+    map <C-W>q :qa<cr>
+    " The adventurous way
+    map <C-W><C-Q> :qa!<cr>
+    " The 'I'm done here' way
+    map <C-W>x :xa<cr>
+
+" Enable loading local .vimrc files
+" Allows for per-project configuration
+" See https://medium.com/@dnrvs/per-project-settings-in-nvim-fc8c8877d970
+set exrc
+set secure
+
 " Enhance compatibility (for Fish users)
 if &shell =~# 'fish$'
     set shell=sh
 endif
 
 " Sets how many lines of history VIM has to remember
-set history=500
+set history=1000
 
 " Enable filetype plugins
 filetype plugin on
@@ -72,7 +88,7 @@ set autoread
 let mapleader = ","
 
 " Fast saving
-nmap <leader>w :w!<cr>
+nmap <leader>w :up<cr>
 nmap <leader>W :w!<cr>
 
 " :W sudo saves the file
@@ -164,11 +180,10 @@ endif
 " set foldcolumn=1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Colors and Fonts
+" => Colors, Fonts and Syntax
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable syntax highlighting
 syntax enable
-syntax on
 
 " Enable 256 colors palette in Gnome Terminal
 if $COLORTERM == 'gnome-terminal'
@@ -192,19 +207,23 @@ set encoding=utf8
 set ffs=unix,dos,mac
 
 " Chose a theme depending on wether you're using term or TTY
-colorscheme monokai
-let g:monokai_term_italic = 1
-let g:monokai_gui_italic = 1
+colo monokai
 
 " Higlight characters that exceed a certain columns limit
 highlight OverLength ctermbg=darkred ctermfg=white guibg=#FFD9D9
-" C/C++:
-autocmd BufEnter,FileType *.c,*.cpp,*.h,*.hpp match OverLength /\%>79v.\+/
-" Makefiles
+"" In C/C++:
+autocmd BufEnter,FileType *.c,*.cpp,*.h,*.hpp match OverLength /\%>120v.\+/
+"" In Makefiles
 autocmd BufEnter,FileType Makefile,makefile,*.mk,*.mak match OverLength /\%>124v.\+/
 
-" Enable .rasi syntax hylighting
-au BufNewFile,BufRead /*.rasi setf css
+" Enable .rasi syntax highlighting
+au BufEnter,FileType *.rasi setf css
+
+" Allow comments in JSON files by default
+" Make sure apps that use your commented files support JSONC !
+augroup JsonToJsonc
+    autocmd! FileType json set filetype=jsonc
+augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Files, backups and undo
@@ -225,17 +244,20 @@ set expandtab
 set smarttab
 
 " 1 tab == 4 spaces
-set shiftwidth=4
-set tabstop=4
-
-" Linebreak on 500 characters
-set lbr
-set tw=500
+" If you want to set filetype specific shiftwidth,
+" set these values in ~/.vim/ftplugin/FILETYPE.vim
+" where FILETYPE is the name of the filetype in question.
+set shiftwidth=2
+set tabstop=2
 
 set ai "Auto indent
 set si "Smart indent
-set wrap "Wrap lines
+set nowrap "Disable wrapping lines
 
+" Display some of the whitespace characters characters
+" Can pair beautifully with Fira Code (https://github.com/tonsky/FiraCode)
+set lcs=nbsp:_,tab:\|\ ,trail:~,extends:⇨,precedes:⇦
+set list
 
 """"""""""""""""""""""""""""""
 " => Visual mode related
@@ -265,8 +287,8 @@ map <C-l> <C-W>l
 " Close current buffer
 map <C-W>b :Bclose<cr>
 
-" Close all the buffers
-map <leader>ba :bufdo bd<cr>
+" Close all the buffers except the current one
+map <C-W><C-B> :u <bar> %bd! <bar> e# <bar> bd# <bar> normal `" <cr>
 
 " Move between buffers
 map <S-PageUp> :bprevious<cr>
@@ -279,17 +301,12 @@ map <leader>tn :tabnew<cr>
 map <leader>to :tabonly<cr>
 map <leader>tc :tabclose<cr>
 map <leader>tm :tabmove
-map <leader>t<leader> :tabnext
+map <leader>t<leader> :tabnext<cr>
 
 " Let 'tl' toggle between this and the last accessed tab
 let g:lasttab = 1
 nmap <Leader>tl :exe "tabn ".g:lasttab<CR>
 au TabLeave * let g:lasttab = tabpagenr()
-
-
-" Opens a new tab with the current buffer's path
-" Super useful when editing files in the same directory
-map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 
 " Switch CWD to the directory of the open buffer
 map <leader>cd :cd %:p:h<cr>:pwd<cr>
@@ -314,6 +331,23 @@ set laststatus=0
 " Format the status line
 set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h
 
+" Show useful information when working with Arduino
+function! ArduinoStatusLine()
+    let port = arduino#GetPort()
+    let line = '[' . g:arduino_board . ']'
+    if !empty(g:arduino_programmer)
+        let line = line . ' [' . g:arduino_programmer . ']'
+    endif
+    if !empty(port)
+        let line = line . ' (' . port . ':' . g:arduino_serial_baud . ')'
+    endif
+    return line
+endfunction
+
+call airline#parts#define_function('arduino', 'ArduinoStatusLine')
+call airline#parts#define_condition('arduino', '&filetype =~ "arduino"')
+let g:airline_section_x = airline#section#create_right(['arduino'])
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Editing mappings
@@ -334,21 +368,9 @@ if has("mac") || has("macunix")
   vmap <D-k> <M-k>
 endif
 
-" Delete trailing white space on save, useful for some filetypes ;)
-fun! CleanExtraSpaces()
-    let save_cursor = getpos(".")
-    let old_query = getreg('/')
-    silent! %s/\s\+$//e
-    call setpos('.', save_cursor)
-    call setreg('/', old_query)
-endfun
-
-if has("autocmd")
-    autocmd BufWritePre * :call CleanExtraSpaces()
-endif
-
 " Sort selection
 vmap <M-s> :sort<cr>
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Spell checking
@@ -405,6 +427,18 @@ function! HasPaste()
     return ''
 endfunction
 
+" Execute a command on all buffers except the current one
+command! -nargs=1 Preserve execute Preserve(<args>)
+function! Preserve(command)
+    try
+        let l:win_view = winsaveview()
+        "silent! keepjumps keeppatterns execute a:command
+        silent! execute 'keeppatterns keepjumps ' . a:command
+    finally
+        call winrestview(l:win_view)
+    endtry
+endfunction
+
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()
 function! <SID>BufcloseCloseIt()
@@ -425,6 +459,32 @@ function! <SID>BufcloseCloseIt()
         execute("bdelete! ".l:currentBufNum)
     endif
 endfunction
+
+
+" Delete trailing white spaces
+let s:NoWhiteSpaceCleanup = [
+            \ 'markdown',
+            \ 'gitcommit',
+            \ ]
+
+fun! CleanExtraSpaces(force)
+    if index(s:NoWhiteSpaceCleanup, &ft) != -1 && a:force != v:true
+      return
+    endif
+
+    let save_cursor = getpos(".")
+    let old_query = getreg('/')
+
+    silent! %s/\s\+$//e
+    call setpos('.', save_cursor)
+    call setreg('/', old_query)
+endfun
+
+" Make it an editor command
+command WhiteSpaceCleanup :call CleanExtraSpaces(v:true)
+
+" ... and automatic with filtering on
+autocmd BufWritePre * :call CleanExtraSpaces(v:false)
 
 function! CmdLine(str)
     call feedkeys(":" . a:str)
@@ -450,6 +510,11 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugin settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Coc Config:
+if exists('CocStart')
+    source ${XDG_CONFIG_HOME}/vim/cocsettings.vim
+endif
+
 " Airline: automatically display all buffers when only one tab is open
 let g:airline#extensions#tabline#enabled = 1
 
@@ -463,20 +528,62 @@ let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 " let g:airline_statusline_ontop=1
 
 " Airline: theme
-let g:airline_theme='simple'
+let g:airline_theme='distinguished'
+
+" UndoTree:
+nnoremap <F5> :UndotreeToggle<CR>
+if has("persistent_undo")
+   let target_path = expand($XDG_CONFIG_HOME . '/vim/.undotree')
+
+    " create the directory and any parent directories
+    " if the location does not exist.
+    if !isdirectory(target_path)
+        call mkdir(target_path, "p", 0700)
+    endif
+
+    let &undodir=target_path
+    set undofile
+endif
+if !exists('g:undotree_WindowLayout')
+    let g:undotree_WindowLayout = 4
+endif
+
+" CtrlP: Ignore stuff from .gitignore
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+
+" GitGutter: Enable number highlighting on NeoVim
+if has('nvim')
+  let g:gitgutter_highlight_linenrs = 1
+end
+
+" GitGutter: Befaster
+let g:gitgutter_highlight_linenrs = 1
 
 " CLang Format: integration in Normal and Visual mode
+" TODO: Set this up in CoC's formatter config
 let g:clang_format#detect_style_file=1
 autocmd FileType c,cpp,objc nnoremap <buffer><C-K> :<C-u>ClangFormat<CR>
 autocmd FileType c,cpp,objc vnoremap <buffer><C-K> :ClangFormat<CR>
 
-" CoC Formatter: Press F10 to use CoC's :Format command in NeoVim
-if has('nvim')
-    noremap <F10> :Format<CR>
-endif
-
 " NERDTree: shortcut
 map <C-n> :NERDTreeToggle<cr>
+
+" NERDCommenter: Shortcuts
+nnoremap <silent> <C-/> :call nerdcommenter#Comment('n', 'toggle')<cr>
+vnoremap <silent> <C-/> :call nerdcommenter#Comment('v', 'toggle')<cr>
+inoremap <silent> <C-/> <Esc>:call nerdcommenter#Comment('x', 'toggle')<cr>
+                             \ <l>
+                             \ :startinsert<cr>
+vnoremap <C-S-/> :call nerdcommenter#Comment('v', 'minimal')<cr>
+
+" NERDCommenter: Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" NERDCommenter: Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+
+" NERDCommenter: Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
 
 " NERDTree: Close vim when the only window left open is NerdTree
 " autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
@@ -504,38 +611,27 @@ call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
 call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
 call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#151515')
 
-" Gutentags: Status bar
-" set statusline+=%{gutentags#statusline()}
-
 " Tagbar: Toggle
 nmap <F8> :TagbarToggle<CR>
 
-" Templates: C project name detection
-function! GetCProjectName()
-     return system("pwd | grep -q libfox && echo -n 'Libfox' || make -np NOLIBFOX=1 2>/dev/null | grep -E '^NAME' | perl -pe 's/(( |\t)*NAME( |\t)*[:+?]?=( |\t)*|(\n|\r)*)//g' 2>/dev/null")
-endfunction
-let g:templates_user_variables = [
-            \   ['CPROJNAME', 'GetCProjectName'],
-            \ ]
+" Templates: Manual variable setting
+let g:username='Ludovic Fernandez'
+let g:email='http://github.com/SirWrexes'
 
 " Switch Buffer: Just a keymap
 nnoremap S :SwitchBuffer <cr>
 
 " Templates: My templates dir
-let g:templates_directory = ['~/.vim/my_templates']
+let g:templates_directory = [$XDG_CONFIG_HOME . '/vim/my_templates']
 
 " Vim Goto Header: Press F12 at any time when on a header's include line to go to it
 if ! has('nvim')
-    nnoremap <F12> :GotoHeader <CR>
-    imap <F12> <Esc>:GotoHeader <CR>
+    nnoremap <F12> :GotoHeader<CR>
+    imap     <F12> <Esc>:GotoHeader<CR>
 endif
 
-" Haskell Syntax Highlighting: Settings for Haskell syntax Hightlighting
-let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
-let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
-let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
-let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
-let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
-let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
-let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
-let g:haskell_classic_highlighting = 1    " to enable classic highlighting
+" Arduino: Main directory for board data files
+let g:arduino_dir = '/usr/share/arduino'
+
+" Vim Visual Increment: work with letters, octal and hex too
+set nrformats=alpha,octal,hex

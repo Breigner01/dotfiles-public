@@ -5,4 +5,10 @@
  * Distributed under terms of the %LICENSE% license.
  */
 
-%HERE%
+package %HERE%;
+
+import org.junit.jupiter.api.Test;
+
+public class %FILE% {
+
+}

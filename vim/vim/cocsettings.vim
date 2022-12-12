@@ -17,6 +17,10 @@ set shortmess+=c
 " always show signcolumns
 set signcolumn=yes
 
+" Restart CoC with [Ctrl] + [F1]
+noremap <F25> :CocRestart<cr>
+inoremap <F25> <Esc>:CocRestart<cr>
+
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
@@ -66,9 +70,10 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
 
-" Remap for format selected region
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+" Use `:CocFormat` to format buffer or selection
+command! -nargs=0 CocFormat :call CocActionAsync('format')
+nnoremap <silent> <F10> :call CocActionAsync('format')<cr>
+xnoremap <silent> <F10> :call CocActionAsync('formatSelected', visualmode())<cr>
 
 augroup mygroup
   autocmd!
@@ -79,11 +84,10 @@ augroup mygroup
 augroup end
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
+xmap <silent> <leader>a :CocAction<cr>
+nmap <silent> <leader>a :CocAction<cr>
+vmap <silent> <leader>a :CocAction<cr>
 
-" Remap for do codeAction of current line
-nmap <leader>ac  <Plug>(coc-codeaction)
 " Fix autofix problem of current line
 nmap <leader>qf  <Plug>(coc-fix-current)
 
@@ -96,9 +100,6 @@ omap af <Plug>(coc-funcobj-a)
 " Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
 nmap <silent> <C-d> <Plug>(coc-range-select)
 xmap <silent> <C-d> <Plug>(coc-range-select)
-
-" Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
 
 " Use `:Fold` to fold current buffer
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
@@ -127,5 +128,5 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>n
 
-" Reload CoC
-nnoremap <leader>cr :CocRestart<CR>
+" Color settings
+hi link CocErrorFloat ErrorMsg
