@@ -11,7 +11,7 @@ cp ~/.config/plasmarc KDE
 cp -r ~/.config/shell .
 cp -r ~/.config/terminator .
 cp -r ~/.config/nvim vim
-rsync -r --exclude "plugged" ~/.config/vim vim/
+rsync -rl --exclude "plugged" --exclude ".undotree" ~/.config/vim vim/
 cp -r ~/.config/yay .
 cp ~/.config/zsh/.zshrc ~/.config/zsh/p10k.zsh zsh
 cp ~/.local/bin/update bin
